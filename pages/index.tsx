@@ -78,7 +78,7 @@ export default function Home() {
     <>
       <div className="sm:p-4 flex items-center justify-center pattern h-screen flex-col justify-between border-b ">
         <div className="max-w-lg p-4 mt-24 bg-white border rounded ">
-          <h1 className="text-lg font-serif pb-1">Cost Calculator</h1>
+          <h1 className="text-lg pb-1">Cost Calculator</h1>
           <p className="text-gray-700 pb-6">
             This tool predicts the cost of a patient for Lilia, based on the AMH
             and age.
@@ -108,7 +108,10 @@ export default function Home() {
 
           <div className="pt-4">
             <button
-              className="px-4 py-2 interact-bounce w-full bg-blue-500 text-white rounded  flex justify-between items-center"
+              className="px-4 py-2 interact-bounce w-full  text-white rounded  flex justify-between items-center"
+              style={{
+                background: "#CC856E",
+              }}
               onClick={calculate}
             >
               Calculate! <span className="text-sm">✨</span>
