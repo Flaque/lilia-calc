@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [amh, setAMH] = useState("30.0");
+  const [amh, setAMH] = useState("12.5");
   const [age, setAge] = useState("28");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -76,6 +76,7 @@ export default function Home() {
 
   return (
     <>
+      <title>Lilia Predict </title>
       <div className="sm:p-4 flex items-center justify-center pattern h-screen flex-col justify-between border-b ">
         <div className="max-w-lg p-4 mt-24 bg-white border rounded ">
           <h1 className="text-lg pb-1">Cost Calculator</h1>
@@ -95,7 +96,7 @@ export default function Home() {
               />
             </label>
 
-            <label className="flex-1">
+            {/* <label className="flex-1">
               <span className="text-xs text-gray-500 pb-1 flex">Age</span>
               <input
                 className="border px-4 py-2 rounded-sm shadow-inner w-full"
@@ -103,7 +104,7 @@ export default function Home() {
                 onChange={(e) => setAge(e.target.value)}
                 placeholder={"28"}
               />
-            </label>
+            </label> */}
           </div>
 
           <div className="pt-4">
@@ -122,14 +123,12 @@ export default function Home() {
             <div className="bg-gray-50 p-2 mt-4">
               <div className="bg-white border rounded-sm">
                 <div className=" flex  border-b ">
-                  <div className="flex-1 text-sm font-mono p-2">Age</div>
                   <div className="flex-1 text-sm font-mono p-2">AMH</div>
                   <div className=" flex-1 text-sm font-mono p-2">Cost</div>
                 </div>
 
                 {runs.map((r) => (
                   <div className=" flex border-b font-mono">
-                    <div className="flex-1 p-2 ">{r.age}</div>
                     <div className="flex-1 border-l p-2">{r.amh}</div>
                     <div className=" flex-1 border-l p-2 ">{r.prediction}</div>
                   </div>

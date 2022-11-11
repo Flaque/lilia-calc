@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Airtable from "airtable";
-import KNN from "ml-knn";
+import { linearRegression, linearRegressionLine } from "simple-statistics";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   "appBfaGzKO6Ki5pvQ"
@@ -17,10 +17,6 @@ function parseFloatOrZero(value: string) {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
-  //   if (body.password !== process.env.PASSWORD) {
-  //     return res.status(401).json({});
-  //   }
-
   const age = body.age;
   const amh = body.amh;
 
@@ -34,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const result = records
     .map((r) => {
-      const cost = r.get("Med Cost") as string;
+      const cost = r.get("Med Cost") as number;
       const age = r.get("Age") as number;
       const amh = r.get("AMH") as string;
 
@@ -49,12 +45,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
     }); // Convert to numbers
 
-  const x = result.map((r) => [r.age, r.amh]);
-  const y = result.map((r) => [r.cost]);
+  const x = result.map((r) => [r.amh, r.cost]);
 
-  const test = [parseInt(age), parseFloatOrZero(amh)];
+  const reg = linearRegression(x);
+  let prediction = linearRegressionLine(reg)(parseFloatOrZero(amh));
 
-  const knn = new KNN(x, y, { k: 5 });
+  if (prediction < 0) {
+    prediction = 0;
+  }
 
-  return res.status(200).json({ prediction: knn.predict(test) });
+  return res.status(200).json({ prediction: prediction });
 };
