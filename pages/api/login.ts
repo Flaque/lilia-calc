@@ -1,7 +1,14 @@
 // A next.js api endpoint
 
 import { NextApiRequest, NextApiResponse } from "next";
+import { PASSWORD } from "../../lib/constants";
 
-const PASSWORD = "evan conrad is pretty good at product";
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  const pass = req.body.password;
 
-export default (req: NextApiRequest, res: NextApiResponse) => {};
+  if (pass !== PASSWORD) {
+    return res.status(401).json({});
+  }
+
+  return res.status(200).json({ success: pass === PASSWORD });
+};

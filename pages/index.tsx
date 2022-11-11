@@ -3,6 +3,8 @@ import { useState } from "react";
 export default function Home() {
   const [amh, setAMH] = useState("30.0");
   const [age, setAge] = useState("28");
+  const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [runs, setRuns] = useState<{ amh: any; age: any; prediction: any }[]>(
     []
@@ -17,6 +19,7 @@ export default function Home() {
       body: JSON.stringify({
         amh,
         age,
+        password,
       }),
     });
 
@@ -35,6 +38,40 @@ export default function Home() {
         prediction,
       },
     ]);
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div className="h-screen w-full items-center justify-center flex flex-col">
+        <label className=" flex flex-col">
+          <span>Enter password</span>
+          <input
+            className="p-2 border rounded"
+            value={password}
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+
+              const result = fetch("/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  password: e.target.value,
+                }),
+              });
+
+              result.then((res) => {
+                if (res.status === 200) {
+                  setIsLoggedIn(true);
+                }
+              });
+            }}
+          />
+        </label>
+      </div>
+    );
   }
 
   return (

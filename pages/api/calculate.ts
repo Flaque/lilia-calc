@@ -17,11 +17,15 @@ function parseFloatOrZero(value: string) {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
+  if (body.password !== process.env.PASSWORD) {
+    return res.status(401);
+  }
+
   const age = body.age;
   const amh = body.amh;
 
   // Grab data from Airtable
-  const records = await base("People")
+  const records = await base("EF Outcomes")
     .select({
       maxRecords: 200,
       view: "Grid view",
