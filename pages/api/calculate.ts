@@ -3,7 +3,7 @@ import Airtable from "airtable";
 import KNN from "ml-knn";
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  "apprRAaU7QaTzmp9V"
+  "appBfaGzKO6Ki5pvQ"
 );
 
 function parseFloatOrZero(value: string) {
@@ -17,9 +17,9 @@ function parseFloatOrZero(value: string) {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
-  if (body.password !== process.env.PASSWORD) {
-    return res.status(401);
-  }
+  //   if (body.password !== process.env.PASSWORD) {
+  //     return res.status(401).json({});
+  //   }
 
   const age = body.age;
   const amh = body.amh;
@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const records = await base("EF Outcomes")
     .select({
       maxRecords: 200,
-      view: "Grid view",
+      view: "EF Pilots",
     })
     .all();
 
@@ -41,11 +41,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return { age, amh, cost };
     })
     .filter((r) => r.cost && r.age && r.amh) // some are empty
-    .map((r) => ({
-      age: r.age,
-      amh: parseFloatOrZero(r.amh),
-      cost: parseFloatOrZero(r.cost.replace("$", "").replace(",", "")),
-    })); // Convert to numbers
+    .map((r) => {
+      return {
+        age: r.age,
+        amh: parseFloatOrZero(r.amh),
+        cost: r.cost,
+      };
+    }); // Convert to numbers
 
   const x = result.map((r) => [r.age, r.amh]);
   const y = result.map((r) => [r.cost]);
